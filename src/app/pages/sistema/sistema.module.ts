@@ -1,0 +1,23 @@
+import {NgModule} from '@angular/core';
+import {CommonModule} from '@angular/common';
+import { NavBarModule } from 'src/app/components/navbar/navbar.module';
+import { SideBarModule } from 'src/app/components/sidebar/sidebar.module';
+import { SistemaRoutingModule } from './sistema-routing.module';
+import { SistemaComponent } from './sistema.component';
+
+@NgModule(
+  {
+    providers: [],
+    declarations: [SistemaComponent],
+    imports: [
+      CommonModule,
+      SistemaRoutingModule,
+    NavBarModule,
+    SideBarModule
+        ]
+
+    }
+)
+
+
+export class SistemaModule{}
