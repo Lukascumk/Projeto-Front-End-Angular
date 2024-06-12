@@ -4,6 +4,7 @@
     "angular.ng-template",
     "tabnine.tabnine-vscode",
     "figma.figma-vscode-extension",
-    "grida.grida-vscode"
+    "grida.grida-vscode",
+    "codeium.codeium"
   ]
 }
