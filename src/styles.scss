@@ -12,8 +12,50 @@
 body {
   font-family: "Poppins";
   margin: 0;
-  background: #27ae60;
+  background: #b4e7b6;
+
+  font-style: normal;
+  font-weight: 400;
+  font-size: 14px;
+  line-height:  21px;
 }
 
-html, body { height: 100%; }
-body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+input{
+  background: #ffffff ;
+  box-sizing: border-box;
+  width:  397px;
+  height:  44px;
+  border: 1px solid #ccd4db;
+  border-radius: 4px;
+  padding: 8px;
+  color: #6e778b;
+
+}
+
+label
+
+{
+}
+
+.error-input
+{
+  font-size: 14px;
+  color: red;
+}
+.btn-primary
+{
+
+}
+
+.container-base {
+  background: red;
+  padding: 88px 16px 0px 128px;
+
+  .content-page {
+    background: white;
+    padding: 16px;
+    border-radius :10px;
+    min-height:800px;
+    min-width:352;
+  }
+}
