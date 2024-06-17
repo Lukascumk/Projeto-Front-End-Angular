@@ -4,6 +4,8 @@ import { NavBarModule } from 'src/app/components/navbar/navbar.module';
 import { SideBarModule } from 'src/app/components/sidebar/sidebar.module';
 import { CategoriaComponent } from './categoria.component';
 import { CategoriaRoutingModule } from './categoria-routing.module';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { NgSelectModule } from '@ng-select/ng-select';
 
 @NgModule(
   {
@@ -13,7 +15,10 @@ import { CategoriaRoutingModule } from './categoria-routing.module';
       CommonModule,
       CategoriaRoutingModule,
     NavBarModule,
-    SideBarModule
+    SideBarModule,
+    FormsModule,
+    ReactiveFormsModule,
+    NgSelectModule
         ]
 
     }
