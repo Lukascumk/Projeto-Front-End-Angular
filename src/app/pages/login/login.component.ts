@@ -2,6 +2,7 @@
 import { Component,OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
+import { AuthService } from 'src/app/services/auth.service';
 import { LoginService } from 'src/app/services/login.services';
 
 
@@ -17,7 +18,8 @@ export class LoginComponent implements OnInit {
   constructor(
     public formBuilder: FormBuilder,
     private router: Router,
-    private loginService: LoginService) {
+    private loginService: LoginService,
+  public autheService: AuthService) {
 
   }
 
@@ -41,16 +43,20 @@ export class LoginComponent implements OnInit {
 
     this.loginService.login(this.dadosForm["email"].value, this.dadosForm["senha"].value).subscribe(
 
-      (response) => {
-        const token = response.token;
-        alert(token);
+
+        (response) =>{
+      const token = response.token;
+        this.autheService.setToken(token);
+        this.autheService.UsuarioAutenticado(true);
         this.router.navigate(["/dashboard"]);
+        //alert (token);
 
       },
       (error) => {
         console.error('Error:', error);
         this.errorMessage = 'Failed to log in';
       }
+    
 
     )
 
