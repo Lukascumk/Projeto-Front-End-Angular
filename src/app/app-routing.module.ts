@@ -3,6 +3,8 @@ import { RouterModule, Routes } from '@angular/router';
 import { LoginComponent } from './pages/login/login.component';
 import { AuthGuard } from './pages/guards/auth-guard.service';
 
+//Definição das rotas do meu projeto, Login, Dashboard, Sistema, Categoria e Despesa//
+
 const routes: Routes = [
   {
     path: '',
