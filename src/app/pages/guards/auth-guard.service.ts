@@ -1,51 +1,33 @@
-import { Injectable } from '@angular/core';
-import { ActivatedRouteSnapshot, CanActivate, Router, UrlTree, RouterStateSnapshot } from '@angular/router';
+import { inject } from '@angular/core';
+import { ActivatedRouteSnapshot, CanActivateFn, Router, UrlTree, RouterStateSnapshot } from '@angular/router';
 import { Observable } from 'rxjs';
 import { AuthService } from 'src/app/services/auth.service';
 
+export const authGuard: CanActivateFn = (
+  next: ActivatedRouteSnapshot,
+  state: RouterStateSnapshot
+): Observable<boolean | UrlTree> | Promise<boolean | UrlTree> | boolean | UrlTree => {
+  const authService = inject(AuthService);
+  const router = inject(Router);
 
-@Injectable(
-  {
-    providedIn:'root'
-  }
-)
-export class AuthGuard implements CanActivate {
-    constructor(private authService: AuthService,
-    public router: Router) { }
+  return new Promise(resolve => authService.checkToken().then(() => {
+    authService.UsuarioEstaAutentificado().then(status => {
+      let redirect: string = state.root.queryParams['redirect'];
+      let blnUnAuthorize = !status; // Ajustado para usar a negação de status
 
+      // Redirecionamento
+      if (blnUnAuthorize) {
+        if (redirect?.length > 0) {
+          router.navigate(['login', { redirect }]);
+        } else {
+          router.navigate(['login']);
+        }
+      }
 
-        canActivate(
-            next: ActivatedRouteSnapshot,
-            state: RouterStateSnapshot
-          ):
-            | Observable<boolean | UrlTree>
-            | Promise<boolean | UrlTree>
-            | boolean
-            | UrlTree {
-            return new Promise(resolve =>
-              this.authService.checkToken().then((x) => {
-                this.authService.UsuarioEstaAutentificado().then(status => {
-                  let redirect: string = state.root.queryParams['redirect'];
-                  let blnUnAuthorize = false;
-        
-                  //validation
-                  if (status === false)
-                    blnUnAuthorize = true;
-        
-                  //redirect
-                  if (blnUnAuthorize && redirect != null && redirect.length > 0)
-                    this.router.navigate(["login", { redirect }]);
-                  else if (blnUnAuthorize)
-                    this.router.navigate(["login"]);
-        
-                  resolve(status);
-                })
-                  .catch(() => {
-                    this.router.navigate(["login"]);
-                    resolve(false);
-                  })
-              }))
-        
-          }
-
-}
+      resolve(status);
+    }).catch(() => {
+      router.navigate(['login']);
+      resolve(false);
+    });
+  }));
+};
