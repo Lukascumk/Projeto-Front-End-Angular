@@ -2,6 +2,7 @@ import { SistemaService } from './../../services/sistema.service';
 import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { SistemaFinanceiro } from 'src/app/models/SistemaFinanceiro';
+import { AuthService } from 'src/app/services/auth.service';
 import { MenuService } from 'src/app/services/menu.service';
 
 @Component({
@@ -11,8 +12,10 @@ import { MenuService } from 'src/app/services/menu.service';
 })
 export class SistemaComponent {
 
-  constructor(public menuService: MenuService, public formBuilder: FormBuilder,
-    public sistemaService : SistemaService
+  constructor(public menuService: MenuService,
+    public formBuilder: FormBuilder,
+    public sistemaService : SistemaService,
+    public authService : AuthService
   ) {
 
   }
@@ -40,8 +43,15 @@ debugger
 var dados = this.dadorForm();
 
 let item = new SistemaFinanceiro();
+item.Nome = dados["name"].value;
 
-item.nome = dados["name"].value;
+item.Id = 0;
+item.Mes = 0;
+item.Ano = 0;
+item.DiaFechamento = 0;
+item.GerarCopiaDespesa = true;
+item.MesCopia = 0;
+item.AnoCopia = 0;
 
 
 
@@ -51,15 +61,16 @@ this.sistemaService.AdicionarSistemaFinanceiro(item)
 
 this.sistemaForm.reset();
 
-this.sistemaService.CadastraUsuarioNoSistema(response.id, "lukas.mota@icloud.com")
+this.sistemaService.CadastraUsuarioNoSistema
+(response.Id, this.authService.getEmailUser())
 .subscribe((response:any) =>
 {
   debugger
 })
 , (error) => console.error(error), () => {}
-    
-  })
-    , (error) => console.error(error), () => {}
-  
 
-}}
+  })
+    , (error) => console.error(error), () => {} }
+
+}
+

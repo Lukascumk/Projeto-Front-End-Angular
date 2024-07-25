@@ -14,4 +14,10 @@ Nome:string;
     DespesaAtrasada: boolean;
     IdCategoria: number;
 
-}
+    NomePropriedade: String ="";
+    mensagem: string ="";
+    notificacoes: [];
+    }
+
+
+

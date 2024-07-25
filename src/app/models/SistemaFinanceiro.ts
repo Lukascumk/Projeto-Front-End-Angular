@@ -1,7 +1,7 @@
 export class SistemaFinanceiro
 {
-  id: number;
-  nome: string;
+  Id: number;
+  Nome: string;
 
   Mes: number;
   Ano: number;
@@ -9,5 +9,9 @@ export class SistemaFinanceiro
   GerarCopiaDespesa: boolean;
   MesCopia: number;
   AnoCopia: number;
+
+  NomePropriedade:string = "";
+  mensagem: string = "";
+  notificacoes: [];
 
 }

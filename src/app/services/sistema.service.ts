@@ -4,38 +4,23 @@ import { environment } from '../../environment';
 import{SistemaFinanceiro} from '../models/SistemaFinanceiro'
 
 
-
 @Injectable({
   providedIn: 'root'
 })
-export class SistemaService
-{
-  constructor(private httpClient: HttpClient) { }
+export class SistemaService {
+  private readonly baseURL = environment.endPoint;
 
+  constructor(private httpClient: HttpClient) {}
 
-  private readonly baseURL = environment["endPoint"];
- AdicionarSistemaFinanceiro(sistemaFinanceiro : SistemaFinanceiro)
-  {
-    return this.httpClient.post<SistemaFinanceiro>(`${this.baseURL}/this.AdicionarSistemaFinanceiro`
-      ,sistemaFinanceiro)
-
+  AdicionarSistemaFinanceiro(sistemaFinanceiro: SistemaFinanceiro) {
+    return this.httpClient.post<SistemaFinanceiro>(`${this.baseURL}/AdicionarSistemaFinanceiro`, sistemaFinanceiro);
   }
 
-  ListarSistemaUsuario(emailUsuario : string)
-  {
-    return this.httpClient.get(`${this.baseURL}/this.ListarSistemaUsuario?emailUsuario=${emailUsuario}`);
+  ListarSistemasUsuario(emailUsuario: string) {
+    return this.httpClient.get<Array<SistemaFinanceiro>>(`${this.baseURL}/ListarSistemasUsuario?emailUsuario=${emailUsuario}`);
   }
 
-
-  CadastraUsuarioNoSistema(idSistema: number, emailUsuario: string)
-  {
-    return this.httpClient.post<any>(`${this.baseURL}
-      /this.CadastraUsuarioNoSistema?idSistema=${idSistema}&emailUsuario=${emailUsuario}`,null)
-
+  CadastraUsuarioNoSistema(idSistema: number, emailUsuario: string) {
+    return this.httpClient.post<any>(`${this.baseURL}/CadastraUsuarioNoSistema?idSistema=${idSistema}&emailUsuario=${emailUsuario}`, null);
   }
-
 }
-
-
-
-

@@ -47,6 +47,7 @@ export class LoginComponent implements OnInit {
         (response) =>{
       const token = response.token;
         this.autheService.setToken(token);
+        this.autheService.setEmailUser(this.dadosForm["email"].value);
         this.autheService.UsuarioAutenticado(true);
         this.router.navigate(["/dashboard"]);
         //alert (token);
@@ -56,7 +57,7 @@ export class LoginComponent implements OnInit {
         console.error('Error:', error);
         this.errorMessage = 'Failed to log in';
       }
-    
+
 
     )
 
