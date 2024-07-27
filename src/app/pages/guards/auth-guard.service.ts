@@ -10,6 +10,9 @@ export const authGuard: CanActivateFn = (
   const authService = inject(AuthService);
   const router = inject(Router);
 
+
+
+  /*
   return new Promise(resolve => authService.checkToken().then(() => {
     authService.UsuarioEstaAutentificado().then(status => {
       let redirect: string = state.root.queryParams['redirect'];
@@ -30,4 +33,18 @@ export const authGuard: CanActivateFn = (
       resolve(false);
     });
   }));
+};
+*/ 
+return authService.checkToken().then(() => {
+  return authService.UsuarioEstaAutentificado().then(status => {
+    if (!status) {
+      const redirect = state.url;
+      router.navigate(['login'], { queryParams: { redirect } });
+    }
+    return status;
+  }).catch(() => {
+    router.navigate(['login']);
+    return false;
+  });
+});
 };

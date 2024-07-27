@@ -12,6 +12,36 @@ import { MenuService } from 'src/app/services/menu.service';
 })
 export class SistemaComponent {
 
+  tipoTela: number = 1;// 1 listagem, 2 cadastro, 3 edição
+  tableListSistemas : Array<SistemaFinanceiro>;
+  id: string;
+
+  page: number = 1;
+  config: any;
+  paginacao: boolean = true;
+  itemsPorPagina: number = 10
+
+  configpag(){
+
+    this.id = this.gerarIdParaConfigDePaginacao();
+
+    this.config = {
+      id: this.id,
+      currentPage: this.page,
+      itemsPorPage: this.itemsPorPagina
+    };	
+  }
+
+  gerarIdParaConfigDePaginacao() {
+    var result = '';
+    var characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+    var charactersLength = characters.length;
+    for (var i = 0; i <10; i++) {
+      result += characters.charAt(Math.floor(Math.random() * charactersLength));
+    }
+    return result;
+  }
+
   constructor(public menuService: MenuService,
     public formBuilder: FormBuilder,
     public sistemaService : SistemaService,
@@ -19,6 +49,8 @@ export class SistemaComponent {
   ) {
 
   }
+
+
 
 sistemaForm: FormGroup;
 
