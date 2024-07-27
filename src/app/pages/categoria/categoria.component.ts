@@ -30,7 +30,8 @@ export class CategoriaComponent implements OnInit {
     this.menuService.menuSelecionado = 3;
 
     this.categoriaForm = this.formBuilder.group({
-      name: ['', [Validators.required]]
+      name: ['', [Validators.required]],
+      sistemaSelect: ['', [Validators.required]]
     });
 
     this.ListarSistemasUsuario();
@@ -42,25 +43,24 @@ export class CategoriaComponent implements OnInit {
 
   enviar() {
     debugger;
-    const dados = this.dadorForm();
-    const item = new Categoria();
+
+    var dados = this.dadorForm();
+    
+    let item = new Categoria();
+
     item.Nome = dados['name'].value;
     item.Id = 0;
+    item.idSistema = parseInt(this.sistemaSelect.id)
 
     this.categoriaService.AdicionarCategoria(item)
-      .subscribe({
-        next: (response: Categoria) => {
-          this.categoriaForm.reset();
-          this.sistemaService.CadastraUsuarioNoSistema(response.Id, this.authService.getEmailUser())
-            .subscribe({
-              next: (res: any) => {
-                debugger;
-              },
-              error: (error) => console.error(error)
-            });
-        },
-        error: (error) => console.error(error)
-      });
+  .subscribe({
+    next: (response: Categoria) => {
+      this.categoriaForm.reset();
+    },
+    error: (error) => console.error(error),
+    complete: () => {}
+  });
+
   }
 
   ListarSistemasUsuario() {
