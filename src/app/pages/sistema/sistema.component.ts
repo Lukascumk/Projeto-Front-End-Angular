@@ -8,101 +8,123 @@ import { MenuService } from 'src/app/services/menu.service';
 @Component({
   selector: 'app-sistema',
   templateUrl: './sistema.component.html',
-  styleUrls: ['./sistema.component.scss']
+  styleUrls: ['./sistema.component.scss'],
 })
 export class SistemaComponent {
-
-  tipoTela: number = 1;// 1 listagem, 2 cadastro, 3 edição
-  tableListSistemas : Array<SistemaFinanceiro>;
+  tipoTela: number = 1; // 1 listagem, 2 cadastro, 3 edição
+  tableListSistemas: Array<SistemaFinanceiro>;
   id: string;
 
   page: number = 1;
   config: any;
   paginacao: boolean = true;
-  itemsPorPagina: number = 10
+  itemsPorPagina: number = 10;
 
-  configpag(){
-
+  configpag() {
     this.id = this.gerarIdParaConfigDePaginacao();
 
     this.config = {
       id: this.id,
       currentPage: this.page,
-      itemsPorPage: this.itemsPorPagina
-    };	
+      itemsPerPage: this.itemsPorPagina,
+    };
   }
 
   gerarIdParaConfigDePaginacao() {
     var result = '';
-    var characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+    var characters =
+      'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
     var charactersLength = characters.length;
-    for (var i = 0; i <10; i++) {
+    for (var i = 0; i < 10; i++) {
       result += characters.charAt(Math.floor(Math.random() * charactersLength));
     }
     return result;
   }
 
-  constructor(public menuService: MenuService,
-    public formBuilder: FormBuilder,
-    public sistemaService : SistemaService,
-    public authService : AuthService
-  ) {
 
+  cadastro(){
+    this.tipoTela =2;
+    this.sistemaForm.reset()
   }
 
+  mudarItemPorPage(){
+    this.page = 1
+    this.config.currentPage = this.page;
+    this.config.itemPerPage = this.itemsPorPagina;
+  }
+mudarPage(event: any){
+  this.page = event;
+  this.config.currentPage = this.page;
+}
 
+  ListaSistemasUsuarios() {
+    this.tipoTela = 1;
 
-sistemaForm: FormGroup;
+    this.sistemaService
+      .ListarSistemasUsuario(this.authService.getEmailUser())
+      .subscribe(
+        (response: Array<SistemaFinanceiro>) => {
+          this.tableListSistemas = response;
+        },
+        (error) => console.error(error),
+        () => {}
+      );
+  }
+
+  constructor(
+    public menuService: MenuService,
+    public formBuilder: FormBuilder,
+    public sistemaService: SistemaService,
+    public authService: AuthService
+  ) {}
+
+  sistemaForm: FormGroup;
 
   ngOnInit() {
-
     this.menuService.menuSelecionado = 2;
+    this.configpag();
+    this.ListaSistemasUsuarios();
 
-    this.sistemaForm = this.formBuilder.group
-    (
-      {
-        name:[' ',[Validators.required]]
-      }
-    )
+    this.sistemaForm = this.formBuilder.group({
+      name: [' ', [Validators.required]],
+    });
   }
-  dadorForm()
-  {
+  dadorForm() {
     return this.sistemaForm.controls;
   }
 
-enviar() {
-debugger
-var dados = this.dadorForm();
+  enviar() {
+    debugger;
+    var dados = this.dadorForm();
 
-let item = new SistemaFinanceiro();
-item.Nome = dados["name"].value;
+    let item = new SistemaFinanceiro();
+    item.Nome = dados['name'].value;
 
-item.Id = 0;
-item.Mes = 0;
-item.Ano = 0;
-item.DiaFechamento = 0;
-item.GerarCopiaDespesa = true;
-item.MesCopia = 0;
-item.AnoCopia = 0;
+    item.Id = 0;
+    item.Mes = 0;
+    item.Ano = 0;
+    item.DiaFechamento = 0;
+    item.GerarCopiaDespesa = true;
+    item.MesCopia = 0;
+    item.AnoCopia = 0;
 
+    this.sistemaService
+      .AdicionarSistemaFinanceiro(item)
+      .subscribe((response: SistemaFinanceiro) => {
+        this.sistemaForm.reset();
 
-
-this.sistemaService.AdicionarSistemaFinanceiro(item)
-.subscribe ((response : SistemaFinanceiro) =>{
-
-
-this.sistemaForm.reset();
-
-this.sistemaService.CadastraUsuarioNoSistema
-(response.Id, this.authService.getEmailUser())
-.subscribe((response:any) =>
-{
-  debugger
-})
-, (error) => console.error(error), () => {}
-
-  })
-    , (error) => console.error(error), () => {} }
-
+        this.sistemaService
+          .CadastraUsuarioNoSistema(
+            response.Id,
+            this.authService.getEmailUser()
+          )
+          .subscribe((response: any) => {
+            debugger;
+          }),
+          (error) => console.error(error),
+          () => {};
+      }),
+      (error) => console.error(error),
+      () => {};
+  }
 }
-
